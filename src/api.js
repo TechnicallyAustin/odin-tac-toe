@@ -63,7 +63,7 @@ const main = (() => {
     const game = this.section.appendChild(document.createElement("article"));
     game.setAttribute(
       "class",
-      "board bg-secondary col-9 d-flex flex-column justify-content-around align-items-center h-75 w-100 bg-dark"
+      "board bg-secondary row row-cols-3 h-75 w-100 bg-dark"
     );
   };
   const display = () => {
