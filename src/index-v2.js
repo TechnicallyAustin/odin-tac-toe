@@ -1,5 +1,13 @@
+// randomize who starts the game
+// create a player 2 or Computer
+// alternate turns
+// evaluate wins each turn
+// create marker Toggle in form
+// create a player 2 option in form
+
 const game = (() => {
     const formContainer = document.querySelector(".name-form")
+    let currentRound = 0
     const newForm = (() => {
         let form = null
         const createForm = () => {
@@ -11,14 +19,20 @@ const game = (() => {
             form.addEventListener("submit", (event) =>{
                 event.preventDefault();
                 let name = document.querySelector("#player-name").value
+                let board = document.querySelector(".board")
                 console.log("form submitted");
                 
                 const newPlayer = Player(name, "X")
                 game.currentPlayer = newPlayer
                 game.display()
-                gameBoard.renderBoard();
-                gameBoard.events();
-                
+
+                if (board.children.length !== 0 ){
+                    console.log("board exists")
+                } else {
+                    gameBoard.renderBoard();
+                    gameBoard.events();
+                }
+                form.reset()
             })
         }
         const legend = () => {
@@ -96,9 +110,12 @@ const game = (() => {
     const winner = () => {
     } //declares a winner based on win combos and markers.
 
-    const round = () => {} // returns the current round.
+    const nextRound = () => {
+        currentRound += 1
+        return currentRound
+    }; // returns the current round.
 
-    return {newForm, display, winCombos, gameStart, winner, round}
+    return {newForm, display, winCombos, gameStart, winner, nextRound}
 })();
 game.gameStart()
 
@@ -130,9 +147,8 @@ const gameBoard = (() => {
                         console.log(game.currentPlayer.getName(), game.currentPlayer.getMarker())
                         console.log("board location", `${i}`)
 
-                        game.display()
                         game.currentPlayer.add(game.currentPlayer.getMarker(), gameBoard.board, i) // adds player marker to the board array
-                        div.textContent = game.currentPlayer.getMarker() // adds player Marker to the Dom.
+                        div.textContent = game.currentPlayer.getMarker() // adds player Marker to the Dom
                     };
             });
         }
@@ -142,7 +158,7 @@ const gameBoard = (() => {
 })();
 
 
-// Playere factory Funcion
+// Player factory Funcion
 const Player = (name, marker) => {
     const getMarker = () => {
         return marker
@@ -156,4 +172,18 @@ const Player = (name, marker) => {
     }; // given form input sets the name of the player.
 
   return { add, getName, getMarker};
+};
+
+const Computer = (marker) => {
+    const name = () => {
+        return "Computer"
+    }
+
+    const add = () => {} // automated Play but intelegently randomizing an array selection.
+
+    const getMarker = () => {
+        return "O"
+    }
+
+    return {name, add, getMarker}
 };
