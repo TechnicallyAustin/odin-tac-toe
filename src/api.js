@@ -68,8 +68,13 @@ const main = (() => {
   };
   const display = () => {
     const gameDisplay = this.section.appendChild(document.createElement("div"));
-    gameDisplay.setAttribute("class", "display w-100 h-25 bg-light");
-    this.display = gameDisplay;
+    gameDisplay.setAttribute(
+      "class",
+      "display w-100 h-25 bg-light d-flex justify-content-center align-items-center"
+    );
+    const playerDisplay = gameDisplay.appendChild(document.createElement("h2"))
+    playerDisplay.setAttribute("class", "player-display")
+    this.display = playerDisplay;
   };
   const text = () => {
     let message = this.display.appendChild(document.createElement("h2"));

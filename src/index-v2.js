@@ -11,18 +11,14 @@ const game = (() => {
             form.addEventListener("submit", (event) =>{
                 event.preventDefault();
                 let name = document.querySelector("#player-name").value
-                console.log("from form", name)
-
+                console.log("form submitted");
+                
                 const newPlayer = Player(name, "X")
-                console.log("form", newPlayer.getName(), newPlayer.getMarker())
-
-                   console.log("form submitted");
-
-                   gameBoard.renderBoard();
-                   gameBoard.events();
-
-
-
+                game.currentPlayer = newPlayer
+                game.display()
+                gameBoard.renderBoard();
+                gameBoard.events();
+                
             })
         }
         const legend = () => {
@@ -75,7 +71,8 @@ const game = (() => {
     };
 
     const display = (() => {
-        // sets the display to the name of the current player
+        const display = document.querySelector(".player-display");
+        display.textContent = `${game.currentPlayer.getName()}. You are ${game.currentPlayer.getMarker()}`
     })
 
     const winCombos = (() => {
@@ -119,7 +116,7 @@ const gameBoard = (() => {
             console.log(container)
             for (let i = 0; i < board.length; i ++){
                 let div = container.appendChild(document.createElement("div"));
-                div.setAttribute("class", `${i} bg-warning col border`);
+                div.setAttribute("class", `board-item ${i} bg-warning col border fs-1 d-flex justify-content-center align-items-center`);
                 div.textContent = board[i]
             }
         }; // renders the game baord
@@ -129,9 +126,15 @@ const gameBoard = (() => {
             for (let i = 0; i < board.children.length; i++){
                 let div = board.children[i]
                 div.addEventListener("click", () => {
-                    console.log("add player marker here")
-                    console.log("board location", `${i}`)
-            })
+                    if (game.currentPlayer){
+                        console.log(game.currentPlayer.getName(), game.currentPlayer.getMarker())
+                        console.log("board location", `${i}`)
+
+                        game.display()
+                        game.currentPlayer.add(game.currentPlayer.getMarker(), gameBoard.board, i) // adds player marker to the board array
+                        div.textContent = game.currentPlayer.getMarker() // adds player Marker to the Dom.
+                    };
+            });
         }
     }; // contains logic for gameboard div events
     
@@ -142,14 +145,13 @@ const gameBoard = (() => {
 // Playere factory Funcion
 const Player = (name, marker) => {
     const getMarker = () => {
-        console.log(marker)
         return marker
     }
-    const add = () => {
-        console.log("added");
+    const add = (marker, board, index) => {
+        board[index] = marker
+        console.log(board);
     }; // adds the player marker to the selected board div
     const getName = () => {
-        console.log(name)
         return name
     }; // given form input sets the name of the player.
 
