@@ -23,6 +23,9 @@ const game = (() => {
             console.log("form created")
             const playerForm = formContainer.appendChild(document.createElement("form"))
             playerForm.setAttribute("class", "new-player-form");
+            playerForm.addEventListener("submit", (event) => {
+                event.preventDefault()
+            })
             form = playerForm
         }
         const legend = () => {
@@ -42,6 +45,7 @@ const game = (() => {
             input.setAttribute("class", "")
             input.setAttribute("id","player-name")
             input.setAttribute("type", "text")
+            input.setAttribute("required", "")
             return input
         }
         const submit = () => {
@@ -50,13 +54,26 @@ const game = (() => {
             submit.setAttribute("class", "");
             submit.setAttribute("type", "submit");
             submit.textContent = "Start Game"
+
+            submit.addEventListener("click", ()=>{
+                console.log("form submitted")
+                gameBoard.renderBoard()
+                gameBoard.events()
+
+            })
             return submit
         }
 
         return { form, createForm, legend, label, input, submit};
     })();
-    return {newForm}
+
+    const display = (() => {
+
+    })
+    return {newForm, display}
 })();
+
+const player = (name, marker) => {}
 
 
 
@@ -67,7 +84,8 @@ const gameBoard = (() => {
     const board = [
         "","","",
         "","","",
-        "","",""];
+        "","",""]; // defines the gameboard as an empty array
+
     const renderBoard = () => {
         const container = document.querySelector(".board")
         console.log(container)
@@ -76,24 +94,39 @@ const gameBoard = (() => {
             div.setAttribute("class", `${i} bg-warning col border`);
             div.textContent = board[i]
         }
-    };
-    const events = () => {
-        const startButton = document.querySelector("#start-button")
-        startButton.addEventListener("click", ()=>{
+    }; // renders the game baord
 
-            function playerForm(){
-                game.newForm.createForm()
-                game.newForm.legend()
-                game.newForm.label()
-                game.newForm.input()
-                game.newForm.submit()
-            };
-            
-            function setUp(){}
-        })
-    };
-    return {board, renderBoard, events}
+    const gameForm = () => {
+        game.newForm.createForm()
+        game.newForm.legend()
+        game.newForm.label()
+        game.newForm.input()
+        game.newForm.submit()
+    }; // organizes form creation methods
+
+    
+    const gameStart = () => {
+            const startButton = document.querySelector("#start-button");
+            startButton.addEventListener("click", ()=>{
+                gameForm()
+            })
+        }; // calls gameForm 
+        gameStart()
+
+    const events = () => {
+        const board = document.querySelector(".board");
+
+        for (let i = 0; i < board.children.length; i++){
+            let div = board.children[i]
+            div.addEventListener("click", () => {
+                console.log("add player marker here")
+                console.log("board location", `${i}`)
+            })
+        }
+    }; // contains logic for gameboard div events
+    
+    
+    return {board, renderBoard, gameForm, events}
 })();
 
-gameBoard.events()
 
