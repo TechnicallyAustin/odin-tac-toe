@@ -4,7 +4,6 @@
 // evaluate wins each turn
 // create marker Toggle in form
 // create a player 2 option in form
-
 const game = (() => {
     const formContainer = document.querySelector(".name-form")
     let currentRound = 0
