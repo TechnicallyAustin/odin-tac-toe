@@ -1,6 +1,9 @@
 // randomize who starts the game
 // create a player 2 or Computer
 // alternate turns
+    // iterate the board to check total amount of O's or X's
+        // if X > O  turn = 0
+
 // evaluate wins each turn
 // create marker Toggle in form
 // create a player 2 option in form
@@ -16,44 +19,60 @@ const game = (() => {
             form = playerForm
 
             form.addEventListener("submit", (event) =>{
-                event.preventDefault();
-                let name = document.querySelector("#player-name").value
-                let board = document.querySelector(".board")
-                console.log("form submitted");
-                
-                const newPlayer = Player(name, "X")
-                game.currentPlayer = newPlayer
-                game.display()
+              event.preventDefault();
+              let board = document.querySelector(".board");
+              console.log("form submitted");
 
-                if (board.children.length !== 0 ){
-                    console.log("board exists")
-                } else {
-                    gameBoard.renderBoard();
-                    gameBoard.events();
-                }
-                form.reset()
-            })
+              game.playerOne()
+              game.playerTwo()
+
+              // board validation
+              if (board.children.length !== 0) {
+                console.log("board exists");
+              } else {
+                gameBoard.renderBoard();
+                gameBoard.events();
+              }
+
+              function clearForm() {
+                form.reset();
+              }; clearForm() // resets or deletes form.
+            });
         }
+
         const legend = () => {
             const legend = form.appendChild(document.createElement("legend"));
             legend.setAttribute("class", "")
             return legend
         }
-        const label = () => {
+        const playerOne = () => {
             const label = form.appendChild(document.createElement("label"))
-            label.setAttribute("for", "player-name")
+            label.setAttribute("for", "player-one")
             label.setAttribute("class","")
-            label.textContent = "Enter your Name!"
-            return label
-        }
-        const input = () => {
+            label.textContent = "Player One Name"
+
             const input = form.appendChild(document.createElement("input"));
             input.setAttribute("class", "")
-            input.setAttribute("id","player-name")
+            input.setAttribute("id","player-one")
             input.setAttribute("type", "text")
             input.setAttribute("required", "")
-            return input
+            return {playerOne}
         }
+
+        const playerTwo = () => {
+            const label = form.appendChild(document.createElement("label"))
+            label.setAttribute("for", "player-two")
+            label.setAttribute("class","")
+            label.textContent = "Player Two Name"
+
+            const input = form.appendChild(document.createElement("input"));
+            input.setAttribute("class", "")
+            input.setAttribute("id","player-two")
+            input.setAttribute("type", "text")
+            input.setAttribute("required", "")
+            return {playerTwo}
+        }
+        
         const submit = () => {
             const submit = form.appendChild(document.createElement("button"));
             submit.setAttribute("id", "");
@@ -63,7 +82,7 @@ const game = (() => {
             return submit
         }
 
-        return { form, createForm, legend, label, input, submit};
+        return { form, createForm, legend, playerOne, playerTwo, submit};
     })();
 
     const gameStart = () => {
@@ -75,13 +94,32 @@ const game = (() => {
           if (form === null){
               game.newForm.createForm();
               game.newForm.legend();
-              game.newForm.label();
-              game.newForm.input();
+              game.newForm.playerOne();
+              game.newForm.playerTwo();
               game.newForm.submit();
           } else {console.log("form exists")};
             
       });
     };
+
+    const playerOne = () => {
+            let playerOne = document.querySelector("#player-one").value;
+            const player = Player(playerOne, "X");
+            game.playerOne = player;
+             console.log(game.playerOne.getName())
+             return {playerOne}
+        } // creates Player One
+                
+    const playerTwo = () => {
+            let playerTwo = document.querySelector("#player-two").value;
+            const player = Player(playerTwo, "O");
+            game.playerTwo = player;
+            console.log(game.playerTwo.getName())
+            return {playerTwo}
+        } // creates Player Two
+
+
+    
 
     const display = (() => {
         const display = document.querySelector(".player-display");
@@ -114,7 +152,7 @@ const game = (() => {
         return currentRound
     }; // returns the current round.
 
-    return {newForm, display, winCombos, gameStart, winner, nextRound}
+    return {newForm, display, winCombos, playerOne, playerTwo, gameStart, winner, nextRound}
 })();
 game.gameStart()
 
@@ -148,6 +186,7 @@ const gameBoard = (() => {
 
                         game.currentPlayer.add(game.currentPlayer.getMarker(), gameBoard.board, i) // adds player marker to the board array
                         div.textContent = game.currentPlayer.getMarker() // adds player Marker to the Dom
+                        game.computer.add("O")
                     };
             });
         }
