@@ -25,6 +25,8 @@ const game = (() => {
 
               game.playerOne()
               game.playerTwo()
+              game.currentPlayer()
+              game.display()
 
               // board validation
               if (board.children.length !== 0) {
@@ -118,6 +120,15 @@ const game = (() => {
             return {playerTwo}
         } // creates Player Two
 
+    const currentPlayer = () => {
+        if ((currentRound / 2) == 1){
+            game.currentPlayer = game.playerOne
+
+        } else {
+            game.currentPlayer = game.playerTwo
+        };
+    }; // if the current round is divisible cleanly by 2 its playerOne's turn
+
 
     
 
@@ -148,11 +159,11 @@ const game = (() => {
     } //declares a winner based on win combos and markers.
 
     const nextRound = () => {
-        currentRound += 1
+        currentRound += 1   
         return currentRound
     }; // returns the current round.
 
-    return {newForm, display, winCombos, playerOne, playerTwo, gameStart, winner, nextRound}
+    return {newForm, display, winCombos, playerOne, playerTwo,currentPlayer, gameStart, winner, nextRound}
 })();
 game.gameStart()
 
