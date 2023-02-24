@@ -1,12 +1,4 @@
-// randomize who starts the game
-// create a player 2 or Computer
-// alternate turns
-    // iterate the board to check total amount of O's or X's
-        // if X > O  turn = 0
 
-// evaluate wins each turn
-// create marker Toggle in form
-// create a player 2 option in form
 const game = (() => {
   const formContainer = document.querySelector(".name-form");
 
@@ -115,7 +107,7 @@ const game = (() => {
     const player = Player(playerOne, "X");
     game.playerOne = player;
     console.log(game.playerOne.getName());
-    return { playerOne };
+    return game.playerOne 
   }; // creates Player One
 
   const playerTwo = () => {
@@ -123,13 +115,22 @@ const game = (() => {
     const player = Player(playerTwo, "O");
     game.playerTwo = player;
     console.log(game.playerTwo.getName());
-    return { playerTwo };
+    return game.playerTwo
   }; // creates Player Two
 
   let turn = () => {
-    let x = gameBoard.board.filter(marker => marker === "X")
-    let o = gameBoard.board.filter(marker => marker === "O")
-    console.log("current player", x, o)
+    let x = gameBoard.board.filter(marker => marker === "X").length
+    let o = gameBoard.board.filter(marker => marker === "O").length
+
+    if (x > o){
+        game.currentPlayer = playerTwo()
+        return game.currentPlayer
+    } else if ( o > x){
+        game.currentPlayer = playerOne()
+        return game.currentPlayer;
+    } else {
+        console.log("Cats Game, Game Over")
+    }
   }; // if the current round is divisible cleanly by 2 its playerOne's turn
 
   let currentRound = 0
@@ -198,9 +199,12 @@ const gameBoard = (() => {
             const board = document.querySelector(".board")
             for (let i = 0; i < board.children.length; i++){
                 let div = board.children[i]
-                div.addEventListener("click", () => {
-                    game.currentPlayer.add(game.currentPlayer.getMarker(), gameBoard.board, i) // adds player marker to the board array
-                    div.textContent = game.currentPlayer.getMarker() // adds player Marker to the Dom
+                div.addEventListener("click", (event) => {
+                    console.log(event.target)
+                    event.target.textContent = game.currentPlayer.getMarker()
+                    game.currentPlayer.add(game.currentPlayer.getMarker(), gameBoard.board, i, event.target) // adds player marker to the board array
+                    game.turn()
+                    game.display()// adds player Marker to the Dom
             });
         }
     }; // contains logic for gameboard div events
@@ -214,40 +218,19 @@ const Player = (name, marker) => {
     const getMarker = () => {
         return marker
     }
-    const add = (marker, board, index) => {
+    const add = (marker, board, index, event) => {
         game.currentRound += 1
         console.log(board);
         console.log(game.currentRound)
         console.log(game.currentPlayer.getName(), game.currentPlayer.getMarker())
         
-        let x = gameBoard.board.filter((marker) => marker === "X");
-        let o = gameBoard.board.filter((marker) => marker === "O");
-        
-        if (game.currentPlayer.getMarker() === "X"){
-            board[index] = marker
-            if (x > o ) {
-                console.log("more X's")
+        board[index] = marker
+        console.log(event)
+        event.textContent = marker
                 console.log("P1",game.playerOne.getName());
                 console.log("P2",game.playerTwo.getName())
-                 console.log("Current",game.currentPlayer.getName());
-                game.currentPlayer = game.playerTwo
+                console.log("Current", game.currentPlayer.getName());
                 console.log("New Current", game.currentPlayer.getName());
-                game.display()
-
-            }
-        } else if (game.currentPlayer.getMarker() === "O"){
-            board[index] = marker
-            if (o > x ){
-                console.log("More O's");
-                console.log("P1",game.playerOne.getName());
-                console.log("P2",game.playerTwo.getName())
-            console.log("Current",game.currentPlayer.getName());
-                game.currentPlayer = game.playerOne
-                console.log("New Current", game.currentPlayer.getName());
-                game.display()
-            }
-        }
-        console.log("x", x,"o", o)
     }; // adds the player marker to the selected board div
     const getName = () => {
         return name
