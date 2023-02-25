@@ -1,7 +1,7 @@
 
 const game = (() => {
     const formContainer = document.querySelector(".name-form");
-    let currentRound = 1
+    let currentRound = 0
 
   const newForm = (() => {
     let form = null;
@@ -120,12 +120,17 @@ const game = (() => {
   }; // creates Player Two
 
 
-const playRound = () => {
-    
+const playRound = (marker, board, index, event) => {
+    console.log(gameBoard.board)
+    console.log(event)
+    if (board[index] === "") {
+        game.currentPlayer.add(marker, board, index, event)
+
+    }
 }
 
   const turn = () => {
-    if (game.currentRound === 9) {
+    if (game.currentRound === 9 ) {
         console.log("It's a Tie!")
     } else if (game.currentRound % 2 === 0){
         game.currentPlayer = game.playerOne
@@ -133,10 +138,9 @@ const playRound = () => {
         game.currentPlayer = game.playerTwo
     }
   game.display()
+  game.winner() // checks for a winner
   game.currentRound++
   }; // if the current round is divisible cleanly by 2 its playerOne's turn
-
-
 
   const display = () => {
     const display = document.querySelector(".player-display");
@@ -170,6 +174,7 @@ const playRound = () => {
     winCombos,
     playerOne,
     playerTwo,
+    playRound,
     turn,
     currentRound,
     gameStart,
@@ -202,10 +207,13 @@ const gameBoard = (() => {
             for (let i = 0; i < board.children.length; i++){
                 let div = board.children[i]
                 div.addEventListener("click", (event) => {
-
-                    event.target.textContent = game.currentPlayer.getMarker()
-                    game.currentPlayer.add(game.currentPlayer.getMarker(), gameBoard.board, i, event.target) // adds player marker to the board array
-                    game.turn()
+                    const cell = event.target
+                    game.playRound(
+                      game.currentPlayer.getMarker(),
+                      gameBoard.board,
+                      i,
+                      cell
+                    ); // adds player marker to the board array
                     //game.display()// adds player Marker to the Dom
             });
         }
@@ -221,20 +229,12 @@ const Player = (name, marker) => {
         return marker
     }
     const add = (marker, board, index, event) => {
-        console.log(board);
-        console.log(game.currentRound)
-        console.log(game.currentPlayer.getName(), game.currentPlayer.getMarker())
-        
-        game.currentRound += 1
+        console.log("marker", marker, "board", board,"index", index,"event", event)
         board[index] = marker
         event.textContent = marker
         game.turn()
-        game.display()
+        console.log(board)
 
-                console.log("P1",game.playerOne.getName());
-                console.log("P2",game.playerTwo.getName())
-                console.log("Current", game.currentPlayer.getName());
-                console.log("New Current", game.currentPlayer.getName());
     }; // adds the player marker to the selected board div
     const getName = () => {
         return name
