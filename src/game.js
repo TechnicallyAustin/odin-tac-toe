@@ -1,17 +1,8 @@
-// needs access to Board
-import {gameBoard} from "./board.js";
+import { gameBoard } from "./board.js";
 import { Player } from "./player.js";
-import {newForm} from "./form.js";
-
-console.log(gameBoard.board)
-
-
-
-// needs access to Players
-// needs access to Form
+import { newForm } from "./form.js";
 
 export const game = (() => {
-  const formContainer = document.querySelector(".name-form");
   let currentRound = 0;
   const gameStart = () => {
     const startButton = document.querySelector("#start-button");
@@ -29,8 +20,6 @@ export const game = (() => {
       }
     });
   };
-
-  const form = () => {}
 
   const playerOne = () => {
     let playerOne = document.querySelector("#player-one").value;
@@ -53,7 +42,6 @@ export const game = (() => {
     console.log(event);
     if (board[index] === "") {
       game.currentPlayer.add(marker, board, index, event);
-      console.log(gameBoard.winCombos(gameBoard.board));
     }
   };
 
@@ -66,18 +54,19 @@ export const game = (() => {
       game.currentPlayer = game.playerTwo;
     }
     game.display();
-    console.log(gameBoard.winCombos(gameBoard.board)); // checks for a winner
     game.currentRound++;
   }; // if the current round is divisible cleanly by 2 its playerOne's turn
 
   const display = () => {
     const display = document.querySelector(".player-display");
+    if (game.currentRound === 9){
+        display.textContent = `Winner is ...`
+    }
     display.textContent = `${game.currentPlayer.getName()}. You are ${game.currentPlayer.getMarker()}`;
-  }
+  };
   // takes an array as an argument to check win combos
   const winner = () => {}; //declares a winner based on win combos and markers
   return {
-    form,
     display,
     playerOne,
     playerTwo,

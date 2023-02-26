@@ -1,6 +1,5 @@
-import {game} from "./game.js"
-import { Player} from "./player.js";
-
+import { game } from "./game.js";
+import { Player } from "./player.js";
 
 export const gameBoard = (() => {
   const board = ["", "", "", "", "", "", "", "", ""]; // defines the gameboard as an empty array

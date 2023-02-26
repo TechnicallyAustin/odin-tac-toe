@@ -1,10 +1,10 @@
-import {Player} from "./player.js";
-import {gameBoard} from "./board.js";
+import { Player } from "./player.js";
+import { gameBoard } from "./board.js";
 import { game } from "./game.js";
 
 export const newForm = (() => {
-    let form = null;
-    const createForm = () => {
+  let form = null;
+  const createForm = () => {
     const formContainer = document.querySelector(".name-form");
     console.log("form created");
     const playerForm = formContainer.appendChild(
