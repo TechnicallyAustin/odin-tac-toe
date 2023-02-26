@@ -1,3 +1,6 @@
+// refactor Gam
+// refactor Gameboard
+// refactor Player
 
 const game = (() => {
     const formContainer = document.querySelector(".name-form");
