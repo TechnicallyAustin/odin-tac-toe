@@ -35,6 +35,7 @@ export const gameBoard = (() => {
   }; // contains logic for gameboard div events
 
   const winCombos = (array) => {
+     const displaySelector = document.querySelector(".player-display");
     // horizontal
     const combos = [
       [array[0], array[1], array[2]],
@@ -48,6 +49,19 @@ export const gameBoard = (() => {
       [array[0], array[4], array[8]],
       [array[2], array[4], array[6]],
     ];
+
+
+    for (let combo of combos){
+        if (combo.every(item => item === "X")){
+            console.log("true", combo)
+            displaySelector.textContent = `${game.playerOne.getName()} Wins!`
+
+
+        } else if (combo.every(item => item === "O")){
+            console.log("true", combo)
+            displaySelector.textContent = `${game.playerTwo.getName()} Wins!`
+        }
+    }
   };
 
   return { board, renderBoard, events, winCombos };

@@ -4,6 +4,7 @@ import { newForm } from "./form.js";
 
 export const game = (() => {
   let currentRound = 0;
+ 
   const gameStart = () => {
     const startButton = document.querySelector("#start-button");
 
@@ -55,17 +56,20 @@ export const game = (() => {
     }
     game.display();
     game.currentRound++;
+    game.winner()
   }; // if the current round is divisible cleanly by 2 its playerOne's turn
 
   const display = () => {
-    const display = document.querySelector(".player-display");
+    const displaySelector = document.querySelector(".player-display");
     if (game.currentRound === 9){
-        display.textContent = `Winner is ...`
+        displaySelector.textContent = `Winner is ...`
     }
-    display.textContent = `${game.currentPlayer.getName()}. You are ${game.currentPlayer.getMarker()}`;
+    displaySelector.textContent = `${game.currentPlayer.getName()}. You are ${game.currentPlayer.getMarker()}`;
   };
   // takes an array as an argument to check win combos
-  const winner = () => {}; //declares a winner based on win combos and markers
+  const winner = () => {
+    gameBoard.winCombos(gameBoard.board)
+  }; //declares a winner based on win combos and markers
   return {
     display,
     playerOne,
